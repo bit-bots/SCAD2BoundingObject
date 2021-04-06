@@ -9,8 +9,8 @@ import os
 
 parser = argparse.ArgumentParser("Generate proto syntax from scad models. Default output is bounding_object.proto")
 parser.add_argument("scad_file", nargs="+")
-parser.add_argument("-o", "--output", help="output file in which the generated proto is saved", default="bounding_object.proto")
-parser.add_argument("-c", "--config", help="config file to specify transform between link origin and scad origin")
+parser.add_argument("-o", "--output", help="output file in which the generated proto is saved, defaults to 'bounding_object.proto'", default="bounding_object.proto")
+parser.add_argument("-c", "--config", help="config file to specify transform between link origin and scad origin", required=True)
 args = parser.parse_args()
 
 outfile = open(args.output, "w")
