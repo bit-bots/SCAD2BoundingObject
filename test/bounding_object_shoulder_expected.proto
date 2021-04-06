@@ -1,0 +1,24 @@
+boundingObject Group {
+  children [
+    Transform {
+      translation -0.028450 0.042000 -0.000000
+      rotation 0.707105 -0.707108 0.000001 3.141595
+      children [
+        Cylinder {
+          radius 0.025
+          height 0.005
+        }
+      ]
+    }
+    Transform {
+      translation -0.021450 0.042000 -0.000000
+      rotation 0.707105 -0.707108 0.000001 3.141595
+      children [
+        Cylinder {
+          radius 0.025
+          height 0.009
+        }
+      ]
+    }
+  ]
+}

@@ -32,7 +32,6 @@ if len(shapes) > 1 or len(shapes[0]) > 1:
     outfile.write(indent * "  " + "children [\n")
     indent += 1
 
-print(shapes)
 for i,shapes_single_file in enumerate(shapes):
     for shape in shapes_single_file:
         if args.config:
@@ -53,12 +52,11 @@ for i,shapes_single_file in enumerate(shapes):
         indent += 1
         outfile.write(indent * "  " + "translation ")
         internal_transform = shape["transform"]
+        cylinder_offset = np.identity(4)
         if shape["type"] is "cylinder":
-            cylinder_offset = np.identity(4)
-            cylinder_offset[:3,:3] = transforms3d.euler.euler2mat(0.5*np.pi, 0, 0)
-            internal_transform = np.matmul(cylinder_offset, internal_transform)
+            cylinder_offset[:3, :3] = transforms3d.euler.euler2mat(0.5*np.pi, 0, 0)
 
-        transformation = np.matmul(transformation, internal_transform)
+        transformation = np.matmul(np.matmul(transformation, internal_transform), cylinder_offset)
         T, R, _, _ = transforms3d.affines.decompose44(transformation)
         outfile.write(f"{T[0]} {T[1]} {T[2]}\n")
         outfile.write(indent * "  " + "rotation ")
@@ -74,12 +72,18 @@ for i,shapes_single_file in enumerate(shapes):
             indent -= 1
             outfile.write(indent * "  " + "}\n")
         elif shape["type"] is "cylinder":
-            print("WARNING: Cylinders not working yet since they are y-up in webots")
             outfile.write(indent * "  " + "Cylinder {\n")
             indent += 1
             size = shape["parameters"]
             outfile.write(indent * "  " + f"height {size[0]}\n")
             outfile.write(indent * "  " + f"radius {size[1]}\n")
+            indent -= 1
+            outfile.write(indent * "  " + "}\n")
+        elif shape["type"] is "sphere":
+            outfile.write(indent * "  " + "Sphere {\n")
+            indent += 1
+            size = shape["parameters"]
+            outfile.write(indent * "  " + f"radius {size}\n")
             indent -= 1
             outfile.write(indent * "  " + "}\n")
 
